@@ -22,6 +22,8 @@ class Percent extends Field
 
     public $displayPercentSign = true;
 
+    public $allowNull = true;
+
     public function __construct(
         string $name,
         string $attribute = null,
@@ -30,6 +32,11 @@ class Percent extends Field
         parent::__construct($name, $attribute, $resolveCallback);
 
         $this->resolveUsing(function ($value) {
+            if ($this->allowNull && $value === null) {
+                $this->withMeta(['isNull' => true]);
+
+                return null;
+            }
 
             if ($this->displayPercentSign) {
                 $this->withMeta([
